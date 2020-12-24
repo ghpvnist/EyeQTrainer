@@ -1,6 +1,6 @@
 <div>
-<img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/GameScreen.png" width="250">
-<img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/MainMenu.png" width="250">
+  <img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/game_screen.png" width="250">
+  <img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/main_menu.png" width="250">
 </div>
 
 # EyeQTrainer
