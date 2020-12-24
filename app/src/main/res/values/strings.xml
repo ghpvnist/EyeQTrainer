@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">EyeQTrainer</string>
-    <string name="eyeq_trainer">EyeQ Trainer</string>
     <string name="start_button">Start</string>
     <string name="clear_score_button">Clear Score</string>
     <string name="logo">logo</string>
     <string name="high_score_main">High Score: %d</string>
     <string name="score_0_game">Score: %d</string>
     <string name="highscore_data">highscore_data</string>
+    <string name="back_to_menu">Back to Menu</string>
+    <string name="new_game">New Game</string>
 </resources>

@@ -2,4 +2,6 @@
 <resources>
     <integer name="GAME_ATTEMPTS">3</integer>
     <integer name="GAME_ATTEMPTS_TEST">100</integer>
+    <integer name="ZERO">0</integer>
+    <integer name="DELAY_600">600</integer>
 </resources>

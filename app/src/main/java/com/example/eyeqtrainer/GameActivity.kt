@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.iterator
 import kotlinx.android.synthetic.main.activity_game.*
@@ -28,77 +29,17 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-
-        generateLevel(gameScore)
-
+        restart()
         val intent: Intent = intent
-        highScore = intent.getIntExtra("highScore", 0)
+        highScore = intent.getIntExtra("highScore", R.integer.ZERO)
         highscore_text.text = this.getString(R.string.high_score_main, highScore)
+    }
+
+    private fun restart() {
+        attempt = 3
+        gameScore = 0
         score_text.text = this.getString(R.string.score_0_game, gameScore)
-    }
-
-    private fun getGridLength(score: Int): Int {
-        when (score) {
-            in 0..1 -> {
-                return 2
-            }
-            in 2..5 -> {
-                return 3
-            }
-            in 6..15 -> {
-                return 4
-            }
-            in 16..25 -> {
-                return 5
-            }
-            in 26..40 -> {
-                return 6
-            }
-            in 41..50 -> {
-                return 7
-            }
-            in 51..60 -> {
-                return 8
-            }
-            in 61..70 -> {
-                return 9
-            }
-            else -> {
-                return 10
-            }
-        }
-    }
-
-    private fun getDifficulty(score: Int): Int {
-        when (score) {
-            in 0..1 -> {
-                return 0x16
-            }
-            in 2..5 -> {
-                return 0x15
-            }
-            in 6..15 -> {
-                return 0x14
-            }
-            in 16..25 -> {
-                return 0x13
-            }
-            in 26..40 -> {
-                return 0x12
-            }
-            in 41..50 -> {
-                return 0x11
-            }
-            in 51..60 -> {
-                return 0x10
-            }
-            in 61..70 -> {
-                return 0x0F
-            }
-            else -> {
-                return 0x0E
-            }
-        }
+        generateLevel(gameScore)
     }
 
     private fun generateLevel(score: Int) {
@@ -170,6 +111,25 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    private fun generateColor(score: Int): Pair<Int, Int> {
+        val androidColors: IntArray = resources.getIntArray(R.array.androidcolors)
+
+        color = androidColors[Random.nextInt(androidColors.size)]
+
+        for (button in gridLayout) {
+            button.setBackgroundColor(color)
+        }
+
+        val difficulty = getDifficulty(score)
+        val r = changeColor((color shr 16) and 0xff, difficulty)
+        val g = changeColor((color shr 8) and 0xff, difficulty)
+        val b = changeColor((color) and 0xff, difficulty)
+
+        colored = (0xFF-difficulty shl 24) + (r shl 16) + (g shl 8) + b
+
+        return Pair(color, colored)
+    }
+
     private fun changeColor(base: Int, difficulty: Int): Int {
         val rng = Random.nextInt(2)
         var baseColor = base
@@ -187,23 +147,68 @@ class GameActivity : AppCompatActivity() {
         return baseColor
     }
 
-    private fun generateColor(score: Int): Pair<Int, Int> {
-        val androidColors: IntArray = resources.getIntArray(R.array.androidcolors)
-
-        color = androidColors[Random.nextInt(androidColors.size)]
-
-        for (button in gridLayout) {
-            button.setBackgroundColor(color)
+    private fun getGridLength(score: Int): Int {
+        when (score) {
+            in 0..1 -> {
+                return 2
+            }
+            in 2..5 -> {
+                return 3
+            }
+            in 6..15 -> {
+                return 4
+            }
+            in 16..25 -> {
+                return 5
+            }
+            in 26..40 -> {
+                return 6
+            }
+            in 41..50 -> {
+                return 7
+            }
+            in 51..60 -> {
+                return 8
+            }
+            in 61..70 -> {
+                return 9
+            }
+            else -> {
+                return 10
+            }
         }
+    }
 
-        val difficulty = getDifficulty(score)
-        val r = changeColor((color shr 16) and 0xff, difficulty)
-        val g = changeColor((color shr 8) and 0xff, difficulty)
-        val b = changeColor((color) and 0xff, difficulty)
-
-        colored = (0xff shl 24) + (r shl 16) + (g shl 8) + b
-
-        return Pair(color, colored)
+    private fun getDifficulty(score: Int): Int {
+        when (score) {
+            in 0..1 -> {
+                return 0x12
+            }
+            in 2..5 -> {
+                return 0x11
+            }
+            in 6..15 -> {
+                return 0x10
+            }
+            in 16..25 -> {
+                return 0x0F
+            }
+            in 26..40 -> {
+                return 0x0E
+            }
+            in 41..50 -> {
+                return 0x0D
+            }
+            in 51..60 -> {
+                return 0x0C
+            }
+            in 61..70 -> {
+                return 0x0B
+            }
+            else -> {
+                return 0x0A
+            }
+        }
     }
 
     private fun showAttempt() {
@@ -214,17 +219,23 @@ class GameActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
             )
             toast.show()
-            Handler(Looper.getMainLooper()).postDelayed({ toast.cancel() }, 600)
+            Handler(Looper.getMainLooper()).postDelayed({ toast.cancel() }, R.integer.DELAY_600.toLong())
         } else {
-            val toast = Toast.makeText(
-                    applicationContext,
-                    "Game Over!",
-                    Toast.LENGTH_SHORT
-            )
-            toast.show()
-            Handler(Looper.getMainLooper()).postDelayed({ toast.cancel() }, 600)
+            gameOverAlert()
+        }
+    }
+
+    private fun gameOverAlert() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Game Over!")
+        builder.setMessage("High Score: $highScore\nCurrent Score: $gameScore")
+        builder.setPositiveButton(R.string.new_game) { dialog, which ->
+            restart()
+        }
+        builder.setNegativeButton(R.string.back_to_menu) { dialog, which ->
             onBackPressed()
         }
+        builder.show()
     }
 
     private fun checkScore() {
