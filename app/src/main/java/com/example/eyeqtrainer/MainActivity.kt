@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -79,7 +78,6 @@ class MainActivity : AppCompatActivity() {
             highScore = data!!.getIntExtra("highScore", 0)
         }
         score_text.text = getString(R.string.high_score_main, highScore)
-        Log.d("SCORE", highScore.toString())
         val fileOutputStream: FileOutputStream
         try {
             fileOutputStream = openFileOutput("highscore_data", Context.MODE_PRIVATE)
