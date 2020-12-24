@@ -43,7 +43,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun generateLevel(score: Int) {
-        val gridLength = getGridLength(score)
+        val gridLength = getGridLength()
 
         gridLayout.removeAllViews()
         gridLayout.columnCount = gridLength
@@ -52,10 +52,49 @@ class GameActivity : AppCompatActivity() {
         val (a, b) = generateColor(score)
         color = a
         colored = b
+        rearrangeColor()
+    }
 
-        val gridSize = gridLength*gridLength
+    private fun generateColor(score: Int): Pair<Int, Int> {
+        val androidColors: IntArray = resources.getIntArray(R.array.androidcolors)
+
+        color = androidColors[Random.nextInt(androidColors.size)]
+
+        for (button in gridLayout) {
+            button.setBackgroundColor(color)
+        }
+
+        val difficulty = getDifficulty(score)
+        val r = changeColor((color shr 16) and 0xff, difficulty)
+        val g = changeColor((color shr 8) and 0xff, difficulty)
+        val b = changeColor((color) and 0xff, difficulty)
+
+        colored = (0xFF shl 24) + (r shl 16) + (g shl 8) + b
+
+        return Pair(color, colored)
+    }
+
+    private fun changeColor(base: Int, difficulty: Int): Int {
+        val rng = Random.nextInt(2)
+        var baseColor = base
+        when (base) {
+            in 0x00..difficulty-> {
+                baseColor += difficulty
+            }
+            in 0xFF-difficulty..0xFF-> {
+                baseColor -= difficulty
+            }
+            else -> {
+                baseColor = if (rng == 0) base + difficulty else base - difficulty
+            }
+        }
+        return baseColor
+    }
+
+    private fun rearrangeColor() {
+        val gridLength = getGridLength()
+        val gridSize = getGridSize()
         coloredIndex = (0 until gridSize).random()
-
         var i = 0
         var r = 0
         var c = 0
@@ -111,44 +150,8 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun generateColor(score: Int): Pair<Int, Int> {
-        val androidColors: IntArray = resources.getIntArray(R.array.androidcolors)
-
-        color = androidColors[Random.nextInt(androidColors.size)]
-
-        for (button in gridLayout) {
-            button.setBackgroundColor(color)
-        }
-
-        val difficulty = getDifficulty(score)
-        val r = changeColor((color shr 16) and 0xff, difficulty)
-        val g = changeColor((color shr 8) and 0xff, difficulty)
-        val b = changeColor((color) and 0xff, difficulty)
-
-        colored = (0xFF-difficulty shl 24) + (r shl 16) + (g shl 8) + b
-
-        return Pair(color, colored)
-    }
-
-    private fun changeColor(base: Int, difficulty: Int): Int {
-        val rng = Random.nextInt(2)
-        var baseColor = base
-        when (base) {
-            in 0x00..difficulty-> {
-                baseColor += difficulty
-            }
-            in 0xFF-difficulty..0xFF-> {
-                baseColor -= difficulty
-            }
-            else -> {
-                baseColor = if (rng == 0) base + difficulty else base - difficulty
-            }
-        }
-        return baseColor
-    }
-
-    private fun getGridLength(score: Int): Int {
-        when (score) {
+    private fun getGridLength(): Int {
+        when (gameScore) {
             in 0..1 -> {
                 return 2
             }
@@ -179,50 +182,59 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    private fun getGridSize(): Int {
+        val gridLength = getGridLength()
+        return gridLength * gridLength
+    }
+
     private fun getDifficulty(score: Int): Int {
         when (score) {
             in 0..1 -> {
                 return 0x12
             }
             in 2..5 -> {
-                return 0x11
-            }
-            in 6..15 -> {
                 return 0x10
             }
-            in 16..25 -> {
-                return 0x0F
-            }
-            in 26..40 -> {
+            in 6..15 -> {
                 return 0x0E
             }
-            in 41..50 -> {
-                return 0x0D
-            }
-            in 51..60 -> {
+            in 16..25 -> {
                 return 0x0C
             }
+            in 26..40 -> {
+                return 0x0A
+            }
+            in 41..50 -> {
+                return 0x08
+            }
+            in 51..60 -> {
+                return 0x06
+            }
             in 61..70 -> {
-                return 0x0B
+                return 0x04
             }
             else -> {
-                return 0x0A
+                return 0x02
             }
         }
     }
 
     private fun showAttempt() {
         if (attempt > 0) {
-            val toast = Toast.makeText(
-                    applicationContext,
-                    "Attempts Remaining: $attempt",
-                    Toast.LENGTH_SHORT
-            )
-            toast.show()
-            Handler(Looper.getMainLooper()).postDelayed({ toast.cancel() }, R.integer.DELAY_600.toLong())
+            makeToast("Attempts Remaining: $attempt", 600)
         } else {
             gameOverAlert()
         }
+    }
+
+    private fun makeToast(text: String, duration: Long) {
+        val toast = Toast.makeText(
+            applicationContext,
+            text,
+            Toast.LENGTH_SHORT
+        )
+        toast.show()
+        Handler(Looper.getMainLooper()).postDelayed({ toast.cancel() }, duration)
     }
 
     private fun gameOverAlert() {
