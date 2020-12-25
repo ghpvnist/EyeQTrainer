@@ -33,11 +33,20 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
-        } catch (e: Exception) {
-            e.printStackTrace()
         } finally {
             score_text.text = getString(R.string.high_score_main, highScore)
         }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        }
+        actionBar?.hide()
     }
 
     fun startButton(v: View) {
@@ -67,8 +76,6 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 
@@ -87,8 +94,6 @@ class MainActivity : AppCompatActivity() {
         } catch (e: NumberFormatException) {
             e.printStackTrace()
         } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: Exception) {
             e.printStackTrace()
         } finally {
             writeData(highScore.toString())
