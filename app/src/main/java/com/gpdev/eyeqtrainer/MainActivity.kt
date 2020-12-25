@@ -1,4 +1,4 @@
-package com.example.eyeqtrainer
+package com.gpdev.eyeqtrainer
 
 import android.app.Activity
 import android.content.Context

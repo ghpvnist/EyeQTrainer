@@ -1,4 +1,4 @@
-package com.example.eyeqtrainer
+package com.gpdev.eyeqtrainer
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
