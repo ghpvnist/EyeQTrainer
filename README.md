@@ -1,7 +1,6 @@
 <div>
   <img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/game_screen.png" width="230">
   <img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/main_menu.png" width="230">
-  <img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/game_screen_landscape.png" height="227">
 </div>
 
 # EyeQTrainer 🧠
@@ -13,6 +12,8 @@ What is EyeQTrainer? 👀
 - 🌈 There are 145 colors in the game to test yourself on!
 - ⭐️ Available for free on Google Play [here!](https://play.google.com/store/apps/details?id=com.gpdev.eyeqtrainer) 
 - 🌅 Supports landscape mode! 
+
+<img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/game_screen_landscape.png" height="227">
 
 Future Goals:
 - ⚙️ Integrate a system to see a graph of personalized data of which colors the user sees the best and worst. 
