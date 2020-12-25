@@ -13,7 +13,9 @@ What is EyeQTrainer? 👀
 - ⭐️ Available for free on Google Play [here!](https://play.google.com/store/apps/details?id=com.gpdev.eyeqtrainer) 
 - 🌅 Supports landscape mode! 
 
-<img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/game_screen_landscape.png" height="227">
+<div>
+  <img align="right" src="https://github.com/ghpvnist/EyeQTrainer/blob/master/app/src/main/res/drawable/game_screen_landscape.png" height="227">
+</div>
 
 Future Goals:
 - ⚙️ Integrate a system to see a graph of personalized data of which colors the user sees the best and worst. 
